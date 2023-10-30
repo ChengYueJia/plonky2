@@ -209,6 +209,7 @@ pub(crate) fn fft_classic<F: Field>(values: &mut [F], r: usize, root_table: &Fft
 mod tests {
     use alloc::vec::Vec;
 
+    use ark_std::{end_timer, start_timer};
     use plonky2_util::{log2_ceil, log2_strict};
 
     use crate::fft::{fft, fft_with_options, ifft};
@@ -218,8 +219,10 @@ mod tests {
 
     #[test]
     fn fft_and_ifft() {
+        let start = start_timer!(|| "fft_and_ifft");
+
         type F = GoldilocksField;
-        let degree = 200usize;
+        let degree: usize = 1 << 25;
         let degree_padded = degree.next_power_of_two();
 
         // Create a vector of coeffs; the first degree of them are
@@ -250,6 +253,7 @@ mod tests {
                 fft_with_options(zero_tail, Some(r), None)
             );
         }
+        end_timer!(start);
     }
 
     fn evaluate_naive<F: Field>(coefficients: &PolynomialCoeffs<F>) -> PolynomialValues<F> {
