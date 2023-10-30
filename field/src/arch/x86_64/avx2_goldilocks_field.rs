@@ -524,6 +524,9 @@ mod tests {
         ]
     }
 
+    use ark_std::{end_timer, start_timer};
+    const ROUND: usize = 1 << 30;
+
     #[test]
     fn test_add() {
         let a_arr = test_vals_a();
@@ -531,6 +534,13 @@ mod tests {
 
         let packed_a = *Avx2GoldilocksField::from_slice(&a_arr);
         let packed_b = *Avx2GoldilocksField::from_slice(&b_arr);
+
+        let start = start_timer!(|| "avx2_add");
+        for _ in 0..ROUND {
+            let packed_res = packed_a + packed_b;
+        }
+        end_timer!(start);
+
         let packed_res = packed_a + packed_b;
         let arr_res = packed_res.as_slice();
 
@@ -547,6 +557,13 @@ mod tests {
 
         let packed_a = *Avx2GoldilocksField::from_slice(&a_arr);
         let packed_b = *Avx2GoldilocksField::from_slice(&b_arr);
+
+        let start = start_timer!(|| "avx2_mul");
+        for _ in 0..ROUND {
+            let packed_res = packed_a * packed_b;
+        }
+        end_timer!(start);
+
         let packed_res = packed_a * packed_b;
         let arr_res = packed_res.as_slice();
 
@@ -561,6 +578,11 @@ mod tests {
         let a_arr = test_vals_a();
 
         let packed_a = *Avx2GoldilocksField::from_slice(&a_arr);
+        let start = start_timer!(|| "avx2_square");
+        for _ in 0..ROUND {
+            let packed_res = packed_a.square();
+        }
+        end_timer!(start);
         let packed_res = packed_a.square();
         let arr_res = packed_res.as_slice();
 
