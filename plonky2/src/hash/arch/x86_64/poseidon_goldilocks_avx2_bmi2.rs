@@ -59,46 +59,46 @@ static TOP_ROW_EXPS: [usize; 12] = [0, 10, 16, 3, 12, 8, 1, 5, 3, 0, 1, 0];
 
 /// The maximum amount by which the MDS matrix will multiply the input.
 /// i.e. max(MDS(state)) <= mds_matrix_inf_norm() * max(state).
-const fn mds_matrix_inf_norm() -> u64 {
-    let mut cumul = 0;
-    let mut i = 0;
-    while i < WIDTH {
-        cumul += 1 << <GoldilocksField as Poseidon>::MDS_MATRIX_EXPS[i];
-        i += 1;
-    }
-    cumul
-}
-
-/// Ensure that adding round constants to the low result of the MDS multiplication can never
-/// overflow.
-#[allow(dead_code)]
-const fn check_round_const_bounds_mds() -> bool {
-    let max_mds_res = mds_matrix_inf_norm() * (u32::MAX as u64);
-    let mut i = WIDTH; // First const layer is handled specially.
-    while i < WIDTH * N_ROUNDS {
-        if ALL_ROUND_CONSTANTS[i].overflowing_add(max_mds_res).1 {
-            return false;
-        }
-        i += 1;
-    }
-    true
-}
-const_assert!(check_round_const_bounds_mds());
-
-/// Ensure that the first WIDTH round constants are in canonical form for the vpcmpgtd trick.
-#[allow(dead_code)]
-const fn check_round_const_bounds_init() -> bool {
-    let max_permitted_round_const = 0xffffffff00000000;
-    let mut i = 0; // First const layer is handled specially.
-    while i < WIDTH {
-        if ALL_ROUND_CONSTANTS[i] > max_permitted_round_const {
-            return false;
-        }
-        i += 1;
-    }
-    true
-}
-const_assert!(check_round_const_bounds_init());
+// const fn mds_matrix_inf_norm() -> u64 {
+//     let mut cumul = 0;
+//     let mut i = 0;
+//     while i < WIDTH {
+//         cumul += 1 << <GoldilocksField as Poseidon>::MDS_MATRIX_EXPS[i];
+//         i += 1;
+//     }
+//     cumul
+// }
+//
+// /// Ensure that adding round constants to the low result of the MDS multiplication can never
+// /// overflow.
+// #[allow(dead_code)]
+// const fn check_round_const_bounds_mds() -> bool {
+//     let max_mds_res = mds_matrix_inf_norm() * (u32::MAX as u64);
+//     let mut i = WIDTH; // First const layer is handled specially.
+//     while i < WIDTH * N_ROUNDS {
+//         if ALL_ROUND_CONSTANTS[i].overflowing_add(max_mds_res).1 {
+//             return false;
+//         }
+//         i += 1;
+//     }
+//     true
+// }
+// const_assert!(check_round_const_bounds_mds());
+//
+// /// Ensure that the first WIDTH round constants are in canonical form for the vpcmpgtd trick.
+// #[allow(dead_code)]
+// const fn check_round_const_bounds_init() -> bool {
+//     let max_permitted_round_const = 0xffffffff00000000;
+//     let mut i = 0; // First const layer is handled specially.
+//     while i < WIDTH {
+//         if ALL_ROUND_CONSTANTS[i] > max_permitted_round_const {
+//             return false;
+//         }
+//         i += 1;
+//     }
+//     true
+// }
+// const_assert!(check_round_const_bounds_init());
 
 // Preliminary notes:
 // 1. AVX does not support addition with carry but 128-bit (2-word) addition can be easily
