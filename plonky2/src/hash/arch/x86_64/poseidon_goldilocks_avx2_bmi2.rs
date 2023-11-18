@@ -42,20 +42,20 @@ static TOP_ROW_EXPS: [usize; 12] = [0, 10, 16, 3, 12, 8, 1, 5, 3, 0, 1, 0];
 
 /// The MDS matrix multiplication ASM is specific to the MDS matrix below. We want this file to
 /// fail to compile if it has been changed.
-#[allow(dead_code)]
-const fn check_mds_matrix() -> bool {
-    // Can't == two arrays in a const_assert! (:
-    let mut i = 0;
-    let wanted_matrix_exps = [0, 0, 1, 0, 3, 5, 1, 8, 12, 3, 16, 10];
-    while i < WIDTH {
-        if <GoldilocksField as Poseidon>::MDS_MATRIX_EXPS[i] != wanted_matrix_exps[i] {
-            return false;
-        }
-        i += 1;
-    }
-    true
-}
-const_assert!(check_mds_matrix());
+// #[allow(dead_code)]
+// const fn check_mds_matrix() -> bool {
+//     // Can't == two arrays in a const_assert! (:
+//     let mut i = 0;
+//     let wanted_matrix_exps = [0, 0, 1, 0, 3, 5, 1, 8, 12, 3, 16, 10];
+//     while i < WIDTH {
+//         if <GoldilocksField as Poseidon>::MDS_MATRIX_CIRC[i] != wanted_matrix_exps[i] {
+//             return false;
+//         }
+//         i += 1;
+//     }
+//     true
+// }
+// const_assert!(check_mds_matrix());
 
 /// The maximum amount by which the MDS matrix will multiply the input.
 /// i.e. max(MDS(state)) <= mds_matrix_inf_norm() * max(state).

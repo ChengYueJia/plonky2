@@ -214,7 +214,8 @@ impl Poseidon for GoldilocksField {
          0xdcedab70f40718ba, 0xe796d293a47a64cb, 0x80772dc2645b280b, ],
     ];
 
-    #[cfg(not(all(target_arch = "aarch64", target_feature = "neon")))]
+    #[cfg(not(any(all(target_arch="aarch64", target_feature="neon"),
+        all(target_arch="x86_64", target_feature="avx2", target_feature="bmi2"))))]
     #[inline(always)]
     #[unroll::unroll_for_loops]
     fn mds_layer(state: &[Self; 12]) -> [Self; 12] {

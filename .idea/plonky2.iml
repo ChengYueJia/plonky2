@@ -15,6 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/starky/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/u32/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/field/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
